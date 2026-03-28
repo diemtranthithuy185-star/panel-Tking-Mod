@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Panel TKing Mod</title>
+
+<style>
+
+body{
+margin:0;
+font-family:Arial;
+background:black;
+color:white;
+overflow:hidden;
+display:flex;
+justify-content:center;
+align-items:center;
+height:100vh;
+}
+
+canvas{
+position:fixed;
+top:0;
+left:0;
+z-index:-1;
+}
+
+#notify{
+position:fixed;
+top:20px;
+right:20px;
+background:#00ff88;
+color:black;
+padding:12px 20px;
+border-radius:10px;
+font-weight:bold;
+display:none;
+z-index:999;
+}
+
+#loading{
+position:fixed;
+width:100%;
+height:100%;
+background:black;
+display:flex;
+justify-content:center;
+align-items:center;
+flex-direction:column;
+font-size:35px;
+color:#00ffff;
+letter-spacing:3px;
+animation:pulse 2s infinite;
+}
+
+@keyframes pulse{
+0%{opacity:0.4}
+50%{opacity:1}
+100%{opacity:0.4}
+}
+
+.box{
+display:none;
+background:#111;
+padding:30px;
+border-radius:20px;
+box-shadow:0 0 30px #00ffff;
+text-align:center;
+}
+
+input{
+padding:12px;
+margin:10px;
+border:none;
+border-radius:10px;
+width:220px;
+font-size:16px;
+}
+
+button{
+padding:12px 25px;
+border:none;
+border-radius:12px;
+background:linear-gradient(45deg,#00ffff,#00ff88);
+font-size:16px;
+cursor:pointer;
+font-weight:bold;
+margin-top:10px;
+}
+
+.freeKey{
+background:linear-gradient(45deg,#00ffcc,#00ffff);
+}
+
+.buyKey{
+background:linear-gradient(45deg,#ffaa00,#ffd35e);
+}
+
+#panel{
+display:none;
+text-align:center;
+}
+
+.logo{
+font-size:50px;
+color:#00ffff;
+text-shadow:0 0 30px #00ffff;
+}
+
+.feature{
+margin:12px;
+padding:18px;
+border-radius:15px;
+font-size:22px;
+font-weight:bold;
+cursor:pointer;
+transition:0.3s;
+}
+
+.feature:hover{
+transform:scale(1.12);
+}
+
+.f1{background:linear-gradient(45deg,#ff0000,#ff5e5e);}
+.f2{background:linear-gradient(45deg,#00ff88,#5effc1);}
+.f3{background:linear-gradient(45deg,#0099ff,#5ecbff);}
+.f4{background:linear-gradient(45deg,#ffaa00,#ffd35e);}
+.f5{background:linear-gradient(45deg,#cc00ff,#ea5eff);}
+
+.status{
+margin-left:10px;
+color:black;
+background:white;
+padding:3px 10px;
+border-radius:8px;
+font-size:14px;
+}
+
+.signature{
+position:fixed;
+bottom:10px;
+width:100%;
+text-align:center;
+font-size:14px;
+color:#00ffff;
+opacity:0.7;
+}
+
+</style>
+</head>
+
+<body>
+
+<canvas id="bg"></canvas>
+
+<div id="notify"></div>
+
+<div id="loading">
+Panel TKing Mod
+<div style="font-size:18px">Loading...</div>
+</div>
+
+
+<div id="loginBox" class="box">
+
+<h2>Panel TKing Mod</h2>
+
+<input type="text" id="userKey" placeholder="Nhập key">
+
+<br>
+
+<button onclick="loginKey()">Đăng nhập</button>
+
+<br><br>
+
+<button onclick="openGetKey()" class="freeKey">
+Lấy key miễn phí (24h)
+</button>
+
+<br>
+
+<button onclick="buyKey()" class="buyKey">
+Mua key vĩnh viễn
+</button>
+
+</div>
+
+
+<div id="panel">
+
+<div class="logo">Panel TKing Mod</div>
+
+<div id="expireText"></div>
+
+<div class="feature f1" onclick="toggle(this,'AimLock VIP')">
+AimLock VIP <span class="status">OFF</span>
+</div>
+
+<div class="feature f2" onclick="toggle(this,'Fix Rung Tâm')">
+Fix Rung Tâm <span class="status">OFF</span>
+</div>
+
+<div class="feature f3" onclick="toggle(this,'Buff FPS')">
+Buff FPS <span class="status">OFF</span>
+</div>
+
+<div class="feature f4" onclick="toggle(this,'Giảm Lag')">
+Giảm Lag <span class="status">OFF</span>
+</div>
+
+<div class="feature f5" onclick="toggle(this,'Antiban Safe')">
+Antiban Safe <span class="status">OFF</span>
+</div>
+
+</div>
+
+
+<div class="signature">
+STYLE TKing Mod
+</div>
+
+
+<script>
+
+
+setTimeout(()=>{
+loading.style.display="none"
+loginBox.style.display="block"
+autoPasteKey()
+},2500)
+
+
+
+function showNotify(text,color){
+
+notify.innerText=text
+notify.style.background=color
+notify.style.display="block"
+
+setTimeout(()=>{
+notify.style.display="none"
+},2000)
+
+}
+
+
+
+/* LINK GETKEY */
+
+function openGetKey(){
+
+localStorage.setItem("returnPanel","true")
+
+window.location.href="https://diemtranthithuy185-star.github.io/getkey-Panel/"
+
+}
+
+
+
+/* COPY ZALO */
+
+function buyKey(){
+
+navigator.clipboard.writeText("036642732")
+
+showNotify("✔ Đã copy số Zalo: 036642732","#00ff88")
+
+}
+
+
+
+/* AUTO DÁN KEY */
+
+function autoPasteKey(){
+
+if(localStorage.getItem("returnPanel")){
+
+localStorage.removeItem("returnPanel")
+
+let savedKey=localStorage.getItem("panelKey")
+
+if(savedKey){
+
+userKey.value=savedKey
+
+showNotify("✔ Key đã tự dán — bấm Đăng nhập","#00ff88")
+
+}
+
+}
+
+}
+
+
+
+function formatTime(time){
+
+let d=new Date(time)
+
+return d.toLocaleTimeString()+" | "+d.toLocaleDateString()
+
+}
+
+
+
+function loginKey(){
+
+let input=userKey.value
+
+let savedKey=localStorage.getItem("panelKey")
+
+let created=parseInt(localStorage.getItem("createdKey"))
+
+let expire=parseInt(localStorage.getItem("expireKey"))
+
+if(input===savedKey && Date.now()<expire){
+
+loginBox.style.display="none"
+
+panel.style.display="block"
+
+expireText.innerHTML=
+
+"Thời gian lấy key: "+formatTime(created)+
+"<br>Key hết hạn lúc: "+formatTime(expire)
+
+showNotify("✔ Đăng nhập thành công","#00ff88")
+
+}else{
+
+showNotify("❌ Key sai hoặc hết hạn","#ff4444")
+
+}
+
+}
+
+
+
+setInterval(()=>{
+
+let expire=parseInt(localStorage.getItem("expireKey"))
+
+if(expire && Date.now()>expire){
+
+localStorage.clear()
+
+location.reload()
+
+}
+
+},60000)
+
+
+
+function toggle(element,name){
+
+let label=element.querySelector(".status")
+
+if(label.innerText==="OFF"){
+
+label.innerText="ON"
+
+label.style.background="#00ff88"
+
+showNotify("✔ "+name+" bật","#00ff88")
+
+}else{
+
+label.innerText="OFF"
+
+label.style.background="white"
+
+showNotify("❌ "+name+" tắt","#ff4444")
+
+}
+
+}
+
+
+
+/* MATRIX BACKGROUND */
+
+var canvas=bg
+
+var ctx=canvas.getContext("2d")
+
+canvas.height=window.innerHeight
+
+canvas.width=window.innerWidth
+
+var letters="TKINGMOD01".split("")
+
+var fontSize=14
+
+var columns=canvas.width/fontSize
+
+var drops=[]
+
+for(var i=0;i<columns;i++) drops[i]=1
+
+function draw(){
+
+ctx.fillStyle="rgba(0,0,0,0.05)"
+
+ctx.fillRect(0,0,canvas.width,canvas.height)
+
+ctx.fillStyle="#00ffff"
+
+ctx.font=fontSize+"px monospace"
+
+for(var i=0;i<drops.length;i++){
+
+var text=letters[Math.floor(Math.random()*letters.length)]
+
+ctx.fillText(text,i*fontSize,drops[i]*fontSize)
+
+if(drops[i]*fontSize>canvas.height && Math.random()>0.975)
+
+drops[i]=0
+
+drops[i]++
+
+}
+
+}
+
+setInterval(draw,33)
+
+</script>
+
+</body>
+</html>
